@@ -1,7 +1,10 @@
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class FileHandler {
     public String readByLines(File file) throws IOException {
@@ -16,7 +19,6 @@ public class FileHandler {
     }
 
     public void scanDirectory(File directory) throws IOException {
-
         if(directory.isDirectory()){
             File[] files = directory.listFiles();
             for (File file : Objects.requireNonNull(files)){
@@ -24,7 +26,9 @@ public class FileHandler {
             }
         }else{
             String readFile = readByLines(directory);
-            System.out.println(readFile);
+            String[] splited = readFile.split("\\W");
+            List<String> cleanList = Arrays.stream(splited).filter(str -> !str.isEmpty()).toList();
+            System.out.println(cleanList);
         }
     }
 }
