@@ -7,6 +7,13 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class FileHandler {
+    private InvertedIndex invertedIndex;
+
+    public FileHandler(InvertedIndex invertedIndex) {
+        this.invertedIndex = invertedIndex;
+    }
+
+
     public String readByLines(File file) throws IOException {
         Scanner scanner = new Scanner(file);
         StringBuilder builder = new StringBuilder();
@@ -28,7 +35,10 @@ public class FileHandler {
             String readFile = readByLines(directory);
             String[] splited = readFile.split("\\W");
             List<String> cleanList = Arrays.stream(splited).filter(str -> !str.isEmpty()).toList();
-            System.out.println(cleanList);
+            for (String word : cleanList){
+                invertedIndex.pushToVocabulary(word, directory.toString());
+            }
+            System.out.println(invertedIndex.getVocabulary());
         }
     }
 }
