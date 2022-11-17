@@ -1,9 +1,13 @@
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class InvertedIndex {
-    private final Map<String, Set<String>> vocabulary = new HashMap<>();
+    private final Map<String, Set<String>> vocabulary = new ConcurrentHashMap<>();
 
     public void pushToVocabulary(String word, String file){
+        if(word == null || file == null){
+            return;
+        }
         if(vocabulary.containsKey(word)){
             vocabulary.get(word).add(file);
         }else{

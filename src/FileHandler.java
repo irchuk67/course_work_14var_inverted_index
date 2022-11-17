@@ -1,13 +1,11 @@
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class FileHandler {
     private InvertedIndex invertedIndex;
+    private final List<File> files = new ArrayList<>();
 
     public FileHandler(InvertedIndex invertedIndex) {
         this.invertedIndex = invertedIndex;
@@ -32,13 +30,18 @@ public class FileHandler {
                 scanDirectory(file);
             }
         }else{
-            String readFile = readByLines(directory);
-            String[] splited = readFile.split("\\W");
-            List<String> cleanList = Arrays.stream(splited).filter(str -> !str.isEmpty()).toList();
-            for (String word : cleanList){
-                invertedIndex.pushToVocabulary(word, directory.toString());
-            }
-            System.out.println(invertedIndex.getVocabulary());
+            files.add(directory);
         }
     }
+
+    public void readFileContent(File file) throws IOException {
+        String readFile = readByLines(file);
+        String[] splited = readFile.split("\\W");
+        List<String> cleanList = Arrays.stream(splited).filter(str -> !str.isEmpty()).toList();
+        for (String word : cleanList){
+            invertedIndex.pushToVocabulary(word.toLowerCase(), file.toString());
+        }
+    }
+
+    public List<File> getAllFiles(){return files;}
 }
