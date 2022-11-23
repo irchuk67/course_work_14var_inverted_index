@@ -20,20 +20,8 @@ public class Main {
             numberOfThreads = scanner.nextInt();
         }
 
-        ThreadIndexer[] threadIndexers = new ThreadIndexer[numberOfThreads];
-
-        for (int i = 0; i < numberOfThreads; i++) {
-            threadIndexers[i] = new ThreadIndexer(files, fileHandler, (files.size() / numberOfThreads) * i, (files.size() / numberOfThreads) * (i + 1));
-        }
-
-        long currentTime = System.currentTimeMillis();
-        for (int i = 0; i < numberOfThreads; i++) {
-            threadIndexers[i].start();
-        }
-        for (int i = 0; i < numberOfThreads; i++) {
-            threadIndexers[i].join();
-        }
-        System.out.printf("Time for parallel execution with %s: %s ms\n", numberOfThreads, (System.currentTimeMillis() - currentTime));
+        Indexer indexer = new Indexer(fileHandler);
+        indexer.index(numberOfThreads, files);
 
         System.out.println("Please, enter word, you want to search: ");
         scanner.nextLine();
