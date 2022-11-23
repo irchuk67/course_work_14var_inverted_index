@@ -15,31 +15,25 @@ public class Main {
         System.out.println("Please, enter number of threads: ");
         Scanner scanner = new Scanner(System.in);
         int numberOfThreads = scanner.nextInt();
-        while(numberOfThreads > files.size()){
+        while (numberOfThreads > files.size()) {
             System.out.println("Number of threads is too large!!! Please, enter lower number of threads: ");
             numberOfThreads = scanner.nextInt();
         }
 
-        ThreadIndexator[] threadIndexators = new ThreadIndexator[numberOfThreads];
+        ThreadIndexer[] threadIndexers = new ThreadIndexer[numberOfThreads];
 
-
-        for (int i = 0; i < numberOfThreads; i++){
-            threadIndexators[i] = new ThreadIndexator(files,
-                    fileHandler,
-                    (files.size()/numberOfThreads) * i,
-                    (files.size()/numberOfThreads) * (i+1)
-                    );
+        for (int i = 0; i < numberOfThreads; i++) {
+            threadIndexers[i] = new ThreadIndexer(files, fileHandler, (files.size() / numberOfThreads) * i, (files.size() / numberOfThreads) * (i + 1));
         }
 
         long currentTime = System.currentTimeMillis();
-        for (int i = 0; i < numberOfThreads; i++){
-            threadIndexators[i].start();
+        for (int i = 0; i < numberOfThreads; i++) {
+            threadIndexers[i].start();
         }
-        for (int i = 0; i < numberOfThreads; i++){
-            threadIndexators[i].join();
+        for (int i = 0; i < numberOfThreads; i++) {
+            threadIndexers[i].join();
         }
-        System.out.printf("Time for parallel execution with %s: %s ms\n",  numberOfThreads, (System.currentTimeMillis() - currentTime));
-
+        System.out.printf("Time for parallel execution with %s: %s ms\n", numberOfThreads, (System.currentTimeMillis() - currentTime));
 
         System.out.println("Please, enter word, you want to search: ");
         scanner.nextLine();

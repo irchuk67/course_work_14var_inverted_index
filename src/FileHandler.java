@@ -11,12 +11,11 @@ public class FileHandler {
         this.invertedIndex = invertedIndex;
     }
 
-
     public String readByLines(File file) throws IOException {
         Scanner scanner = new Scanner(file);
         StringBuilder builder = new StringBuilder();
 
-        while (scanner.hasNextLine()){
+        while (scanner.hasNextLine()) {
             builder.append(scanner.nextLine());
         }
 
@@ -24,12 +23,12 @@ public class FileHandler {
     }
 
     public void scanDirectory(File directory) throws IOException {
-        if(directory.isDirectory()){
+        if (directory.isDirectory()) {
             File[] files = directory.listFiles();
-            for (File file : Objects.requireNonNull(files)){
+            for (File file : Objects.requireNonNull(files)) {
                 scanDirectory(file);
             }
-        }else{
+        } else {
             files.add(directory);
         }
     }
@@ -38,10 +37,12 @@ public class FileHandler {
         String readFile = readByLines(file);
         String[] splited = readFile.split("\\W");
         List<String> cleanList = Arrays.stream(splited).filter(str -> !str.isEmpty()).toList();
-        for (String word : cleanList){
+        for (String word : cleanList) {
             invertedIndex.pushToVocabulary(word.toLowerCase(), file.toString());
         }
     }
 
-    public List<File> getAllFiles(){return files;}
+    public List<File> getAllFiles() {
+        return files;
+    }
 }
