@@ -36,7 +36,7 @@ public class FileHandler {
     public void readFileContent(File file) throws IOException {
         String readFile = readByLines(file);
         String[] splited = readFile.split("\\W");
-        List<String> cleanList = Arrays.stream(splited).filter(str -> !str.isEmpty()).toList();
+        List<String> cleanList = Arrays.stream(splited).filter(str -> !str.isEmpty()).collect(Collectors.toList());
         for (String word : cleanList) {
             invertedIndex.pushToVocabulary(word.toLowerCase(), file.toString());
         }

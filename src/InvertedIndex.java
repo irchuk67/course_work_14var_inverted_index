@@ -24,4 +24,8 @@ public class InvertedIndex {
     public Map<String, Set<String>> getVocabulary() {
         return vocabulary;
     }
+
+    public synchronized boolean isIndexed(){
+        return !vocabulary.isEmpty();
+    }
 }
