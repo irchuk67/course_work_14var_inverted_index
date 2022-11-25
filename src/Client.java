@@ -9,17 +9,16 @@ public class Client {
 
     public static void findWord(boolean isIndexed) throws IOException {
         System.out.println("Please, enter word, you want to search: ");
-        System.out.println(isIndexed);
-        if(!isIndexed) {
+        if (!isIndexed) {
             scanner.nextLine();
         }
         String wordToSearch = scanner.nextLine().toLowerCase();
         outputStream.writeUTF(wordToSearch);
 
         String indexedFiles = inputStream.readUTF();
-        if (indexedFiles.equals("no files found")){
+        if (indexedFiles.equals("no files found")) {
             System.out.println("Sorry, but there is no such word in files.");
-        }else{
+        } else {
             String cleanString = indexedFiles.replace("[", "").replace("]", "");
             String[] filesWithWord = cleanString.split(", ");
             System.out.println("Files that contain the word that you have searched for:");
@@ -50,6 +49,7 @@ public class Client {
                 System.out.println("Files have already been indexed by another client.");
             }
 
+            System.out.println("Second step: word search.");
             do {
                 findWord(isIndexed);
                 isIndexed = true;
@@ -63,6 +63,5 @@ public class Client {
         } catch (Exception e) {
             throw e;
         }
-
     }
 }

@@ -38,20 +38,21 @@ public class ServerThread extends Thread {
 
             do {
                 String word = inputStream.readUTF();
-                System.out.println(word);
+                System.out.println("Client want to find such word: " + word);
                 Set<String> indexedFiles = invertedIndex.getListOfFilesByKey(word);
-                if(indexedFiles == null || indexedFiles.isEmpty()){
+                if (indexedFiles == null || indexedFiles.isEmpty()) {
+                    System.out.println("No files found for this word");
                     outputStream.writeUTF("no files found");
-                }else{
+                } else {
+                    System.out.println("Files were found");
                     outputStream.writeUTF(indexedFiles.toString());
                 }
                 findOneMoreWord = inputStream.readUTF().equals("y");
-                System.out.println(findOneMoreWord);
+                System.out.println("Client " + (findOneMoreWord ? "" : "don't ") + "want to find one more word");
             } while (findOneMoreWord);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }

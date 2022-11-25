@@ -5,14 +5,14 @@ import java.util.Arrays;
 
 public class ServerMain {
     public static void main(String[] args) throws IOException, InterruptedException {
-        try (ServerSocket serverSocket = new ServerSocket(8000)){
+        try (ServerSocket serverSocket = new ServerSocket(8000)) {
             InvertedIndex invertedIndex = new InvertedIndex();
-            while (true){
+            while (true) {
                 Socket socket = serverSocket.accept();
                 ServerThread serverThread = new ServerThread(socket, invertedIndex);
                 serverThread.start();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
