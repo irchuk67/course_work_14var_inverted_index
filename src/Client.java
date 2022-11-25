@@ -9,6 +9,7 @@ public class Client {
 
     public static void findWord(boolean isIndexed) throws IOException {
         System.out.println("Please, enter word, you want to search: ");
+        System.out.println(isIndexed);
         if(!isIndexed) {
             scanner.nextLine();
         }
@@ -16,11 +17,15 @@ public class Client {
         outputStream.writeUTF(wordToSearch);
 
         String indexedFiles = inputStream.readUTF();
-        String cleanString = indexedFiles.replace("[", "").replace("]", "");
-        String[] filesWithWord = cleanString.split(", ");
-        System.out.println("Files that contain the word that you have searched for:");
-        for (String filePath : filesWithWord) {
-            System.out.println(filePath);
+        if (indexedFiles.equals("no files found")){
+            System.out.println("Sorry, but there is no such word in files.");
+        }else{
+            String cleanString = indexedFiles.replace("[", "").replace("]", "");
+            String[] filesWithWord = cleanString.split(", ");
+            System.out.println("Files that contain the word that you have searched for:");
+            for (String filePath : filesWithWord) {
+                System.out.println(filePath);
+            }
         }
     }
 
@@ -47,8 +52,8 @@ public class Client {
 
             do {
                 findWord(isIndexed);
+                isIndexed = true;
                 System.out.println("Do You want to find one more word?(y - yes, n - no)");
-//                scanner.nextLine();
                 String wantToFindMore = scanner.nextLine().toLowerCase();
                 System.out.println(wantToFindMore);
                 outputStream.writeUTF(wantToFindMore);

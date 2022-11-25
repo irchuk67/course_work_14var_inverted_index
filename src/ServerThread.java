@@ -40,7 +40,11 @@ public class ServerThread extends Thread {
                 String word = inputStream.readUTF();
                 System.out.println(word);
                 Set<String> indexedFiles = invertedIndex.getListOfFilesByKey(word);
-                outputStream.writeUTF(indexedFiles.toString());
+                if(indexedFiles == null || indexedFiles.isEmpty()){
+                    outputStream.writeUTF("no files found");
+                }else{
+                    outputStream.writeUTF(indexedFiles.toString());
+                }
                 findOneMoreWord = inputStream.readUTF().equals("y");
                 System.out.println(findOneMoreWord);
             } while (findOneMoreWord);
