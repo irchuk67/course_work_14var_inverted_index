@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 public class ServerThread extends Thread {
-    private Socket socket;
-    private InvertedIndex invertedIndex;
+    private final Socket socket;
+    private final InvertedIndex invertedIndex;
 
     public ServerThread(Socket socket, InvertedIndex invertedIndex) {
         this.socket = socket;
@@ -19,19 +19,22 @@ public class ServerThread extends Thread {
         try {
             DataInputStream inputStream = new DataInputStream(socket.getInputStream());
             DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
-            outputStream.writeBoolean(invertedIndex.isIndexed());
-
-            if (!invertedIndex.isIndexed()) {
-                FileHandler fileHandler = new FileHandler(invertedIndex);
-                File file = new File("acllmdb");
-                fileHandler.scanDirectory(file);
-                List<File> files = fileHandler.getAllFiles();
-                int numberOfThreads = inputStream.readInt();
-                Indexer indexer = new Indexer(fileHandler);
-                outputStream.writeLong(indexer.index(numberOfThreads, files));
+            boolean isIndexed;
+            synchronized (invertedIndex) {
+                isIndexed = invertedIndex.isIndexed();
+                outputStream.writeBoolean(isIndexed);
+                if (!isIndexed) {
+                    FileHandler fileHandler = new FileHandler(invertedIndex);
+                    File file = new File("acllmdb");
+                    fileHandler.scanDirectory(file);
+                    List<File> files = fileHandler.getAllFiles();
+                    int numberOfThreads = inputStream.readInt();
+                    Indexer indexer = new Indexer(fileHandler);
+                    outputStream.writeLong(indexer.index(numberOfThreads, files));
+                }
             }
 
-            boolean findOneMoreWord = false;
+            boolean findOneMoreWord;
 
             do {
                 String word = inputStream.readUTF();

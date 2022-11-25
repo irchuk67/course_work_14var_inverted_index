@@ -25,7 +25,7 @@ public class InvertedIndex {
         return vocabulary;
     }
 
-    public synchronized boolean isIndexed(){
+    public boolean isIndexed(){
         return !vocabulary.isEmpty();
     }
 }
