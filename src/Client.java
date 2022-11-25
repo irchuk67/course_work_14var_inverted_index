@@ -55,7 +55,6 @@ public class Client {
                 isIndexed = true;
                 System.out.println("Do You want to find one more word?(y - yes, n - no)");
                 String wantToFindMore = scanner.nextLine().toLowerCase();
-                System.out.println(wantToFindMore);
                 outputStream.writeUTF(wantToFindMore);
                 findOneMoreWord = wantToFindMore.equals("y");
             } while (findOneMoreWord);
