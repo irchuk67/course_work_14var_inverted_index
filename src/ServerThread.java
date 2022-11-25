@@ -19,24 +19,31 @@ public class ServerThread extends Thread {
         try {
             DataInputStream inputStream = new DataInputStream(socket.getInputStream());
             DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
-            FileHandler fileHandler = new FileHandler(invertedIndex);
-            File file = new File("acllmdb");
-            fileHandler.scanDirectory(file);
-            List<File> files = fileHandler.getAllFiles();
-            System.out.println(invertedIndex.isIndexed());
             outputStream.writeBoolean(invertedIndex.isIndexed());
-            if(!invertedIndex.isIndexed()){
+
+            if (!invertedIndex.isIndexed()) {
+                FileHandler fileHandler = new FileHandler(invertedIndex);
+                File file = new File("acllmdb");
+                fileHandler.scanDirectory(file);
+                List<File> files = fileHandler.getAllFiles();
                 int numberOfThreads = inputStream.readInt();
                 Indexer indexer = new Indexer(fileHandler);
                 outputStream.writeLong(indexer.index(numberOfThreads, files));
             }
 
+            boolean findOneMoreWord = false;
 
-            String word = inputStream.readUTF();
-            Set<String> indexedFiles = invertedIndex.getListOfFilesByKey(word);
-            outputStream.writeUTF(indexedFiles.toString());
+            do {
+                String word = inputStream.readUTF();
+                System.out.println(word);
+                Set<String> indexedFiles = invertedIndex.getListOfFilesByKey(word);
+                outputStream.writeUTF(indexedFiles.toString());
+                findOneMoreWord = inputStream.readUTF().equals("y");
+                System.out.println(findOneMoreWord);
+            } while (findOneMoreWord);
+
         } catch (Exception e) {
-            System.out.println("Error in server thread: " + e);
+            e.printStackTrace();
         }
 
     }

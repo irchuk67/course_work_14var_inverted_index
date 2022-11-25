@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class ServerMain {
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -12,7 +13,7 @@ public class ServerMain {
                 serverThread.start();
             }
         } catch (Exception e){
-            System.out.println("Error in server: " + e);
+            e.printStackTrace();
         }
     }
 }
